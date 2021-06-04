@@ -2202,6 +2202,9 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
         })
         self._remove_duplicate_formats(thumbnails)
 
+        # added
+        live_broadcast_details = microformat.get('liveBroadcastDetails')
+
         category = microformat.get('category') or search_meta('genre')
         channel_id = video_details.get('channelId') \
             or microformat.get('externalChannelId') \
@@ -2210,7 +2213,8 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             video_details.get('lengthSeconds')
             or microformat.get('lengthSeconds')) \
             or parse_duration(search_meta('duration'))
-        is_live = video_details.get('isLive')
+        is_live = video_details.get('isLive') \
+            or live_broadcast_details and live_broadcast_details.get('isLiveNow') # modified
         owner_profile_url = microformat.get('ownerProfileUrl')
 
         info = {
@@ -2243,6 +2247,11 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             'is_live': is_live,
             'playable_in_embed': playability_status.get('playableInEmbed'),
             'was_live': video_details.get('isLiveContent'),
+            # added fields
+            'is_upcoming': video_details.get('isUpcoming'),
+            'live_starttime': live_broadcast_details.get('startTimestamp') if live_broadcast_details else None,
+            'live_endtime': live_broadcast_details.get('endTimestamp') if live_broadcast_details else None,
+            'playability_info': playability_status, #this exposes unstable fields
         }
 
         pctr = try_get(

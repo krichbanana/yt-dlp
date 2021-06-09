@@ -2144,9 +2144,8 @@ class YoutubeDL(object):
 
         formats_to_download = list(format_selector(ctx))
         if not formats_to_download:
-            # Latter two args probably wrong
-            # 'get-url' and 'get-format' options can not possbly succeed.
-            self.__forced_printings(dict(info_dict), None, incomplete=False)
+            # Process what we can. Note that any 'get-url' and 'get-format' options would not possibly succeed.
+            self.process_info(dict(info_dict))
             if not self.params.get('ignore_no_formats_error'):
                 raise ExtractorError('Requested format is not available', expected=True)
             else:
@@ -2319,7 +2318,9 @@ class YoutubeDL(object):
         info_dict['fulltitle'] = info_dict['title']
 
         if 'format' not in info_dict:
-            info_dict['format'] = info_dict['ext']
+            # BUGFIX: don't assume 'ext'
+            if 'ext' in info_dict:
+                info_dict['format'] = info_dict['ext']
 
         if self._match_entry(info_dict) is not None:
             return

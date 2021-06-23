@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 
 from setuptools import setup, Command, find_packages
@@ -19,7 +19,7 @@ LONG_DESCRIPTION = '\n\n'.join((
     '**PS**: Some links in this document will not work since this is a copy of the README.md from Github',
     open('README.md', 'r', encoding='utf-8').read()))
 
-REQUIREMENTS = ['mutagen', 'pycryptodome']
+REQUIREMENTS = ['mutagen', 'pycryptodome', 'websockets']
 
 if sys.argv[1:2] == ['py2exe']:
     raise NotImplementedError('py2exe is not currently supported; instead, use "pyinst.py" to build with pyinstaller')
@@ -88,26 +88,16 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: IronPython',
-        'Programming Language :: Python :: Implementation :: Jython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'License :: Public Domain',
         'Operating System :: OS Independent',
     ],
-    python_requires='>=2.6',
+    python_requires='>=3.6',
 
     cmdclass={'build_lazy_extractors': build_lazy_extractors},
     **params

@@ -225,8 +225,7 @@
  - **Culturebox**
  - **CultureUnplugged**
  - **curiositystream**
- - **curiositystream:collections**
- - **curiositystream:series**
+ - **curiositystream:collection**
  - **CWTV**
  - **DagelijkseKost**: dagelijksekost.een.be
  - **DailyMail**
@@ -497,8 +496,6 @@
  - **LinuxAcademy**
  - **LiTV**
  - **LiveJournal**
- - **LiveLeak**
- - **LiveLeakEmbed**
  - **livestream**
  - **livestream:original**
  - **LnkGo**
@@ -1069,6 +1066,8 @@
  - **TVPlayHome**
  - **Tweakers**
  - **TwitCasting**
+ - **TwitCastingLive**
+ - **TwitCastingUser**
  - **twitch:clips**
  - **twitch:stream**
  - **twitch:vod**
@@ -1130,6 +1129,8 @@
  - **videomore:video**
  - **VideoPress**
  - **Vidio**
+ - **VidioLive**
+ - **VidioPremier**
  - **VidLii**
  - **vidme**
  - **vidme:user**

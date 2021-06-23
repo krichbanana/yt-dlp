@@ -291,8 +291,7 @@ from .ctvnews import CTVNewsIE
 from .cultureunplugged import CultureUnpluggedIE
 from .curiositystream import (
     CuriosityStreamIE,
-    CuriosityStreamCollectionsIE,
-    CuriosityStreamSeriesIE,
+    CuriosityStreamCollectionIE,
 )
 from .cwtv import CWTVIE
 from .dailymail import DailyMailIE
@@ -655,10 +654,6 @@ from .linkedin import (
 from .linuxacademy import LinuxAcademyIE
 from .litv import LiTVIE
 from .livejournal import LiveJournalIE
-from .liveleak import (
-    LiveLeakIE,
-    LiveLeakEmbedIE,
-)
 from .livestream import (
     LivestreamIE,
     LivestreamOriginalIE,
@@ -1429,7 +1424,11 @@ from .tweakers import TweakersIE
 from .twentyfourvideo import TwentyFourVideoIE
 from .twentymin import TwentyMinutenIE
 from .twentythreevideo import TwentyThreeVideoIE
-from .twitcasting import TwitCastingIE
+from .twitcasting import (
+    TwitCastingIE,
+    TwitCastingLiveIE,
+    TwitCastingUserIE,
+)
 from .twitch import (
     TwitchVodIE,
     TwitchCollectionIE,
@@ -1510,7 +1509,11 @@ from .videomore import (
     VideomoreSeasonIE,
 )
 from .videopress import VideoPressIE
-from .vidio import VidioIE
+from .vidio import (
+    VidioIE,
+    VidioPremierIE,
+    VidioLiveIE
+)
 from .vidlii import VidLiiIE
 from .vidme import (
     VidmeIE,

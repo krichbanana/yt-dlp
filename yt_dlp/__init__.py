@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 
 from __future__ import unicode_literals
@@ -24,6 +24,7 @@ from .utils import (
     DateRange,
     decodeOption,
     DownloadError,
+    error_to_compat_str,
     ExistingVideoReached,
     expand_path,
     match_filter_func,
@@ -150,6 +151,11 @@ def _real_main(argv=None):
         if numeric_limit is None:
             parser.error('invalid rate limit specified')
         opts.ratelimit = numeric_limit
+    if opts.throttledratelimit is not None:
+        numeric_limit = FileDownloader.parse_bytes(opts.throttledratelimit)
+        if numeric_limit is None:
+            parser.error('invalid rate limit specified')
+        opts.throttledratelimit = numeric_limit
     if opts.min_filesize is not None:
         numeric_limit = FileDownloader.parse_bytes(opts.min_filesize)
         if numeric_limit is None:
@@ -267,6 +273,7 @@ def _real_main(argv=None):
         'filename', 'format-sort', 'abort-on-error', 'format-spec', 'no-playlist-metafiles',
         'multistreams', 'no-live-chat', 'playlist-index', 'list-formats', 'no-direct-merge',
         'no-youtube-channel-redirect', 'no-youtube-unavailable-videos', 'no-attach-info-json',
+        'embed-thumbnail-atomicparsley',
     ]
     compat_opts = parse_compat_opts()
 
@@ -306,6 +313,16 @@ def _real_main(argv=None):
             opts.outtmpl.update({'default': outtmpl_default})
         else:
             _unused_compat_opt('filename')
+
+    def validate_outtmpl(tmpl, msg):
+        err = YoutubeDL.validate_outtmpl(tmpl)
+        if err:
+            parser.error('invalid %s %r: %s' % (msg, tmpl, error_to_compat_str(err)))
+
+    for k, tmpl in opts.outtmpl.items():
+        validate_outtmpl(tmpl, '%s output template' % k)
+    for tmpl in opts.forceprint:
+        validate_outtmpl(tmpl, 'print template')
 
     if opts.extractaudio and not opts.keepvideo and opts.format is None:
         opts.format = 'bestaudio/best'
@@ -540,6 +557,7 @@ def _real_main(argv=None):
         'ignoreerrors': opts.ignoreerrors,
         'force_generic_extractor': opts.force_generic_extractor,
         'ratelimit': opts.ratelimit,
+        'throttledratelimit': opts.throttledratelimit,
         'overwrites': opts.overwrites,
         'retries': opts.retries,
         'fragment_retries': opts.fragment_retries,

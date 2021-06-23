@@ -22,8 +22,8 @@ yt-dlp is a [youtube-dl](https://github.com/ytdl-org/youtube-dl) fork based on t
 * [NEW FEATURES](#new-features)
     * [Differences in default behavior](#differences-in-default-behavior)
 * [INSTALLATION](#installation)
-    * [Dependencies](#dependencies)
     * [Update](#update)
+    * [Dependencies](#dependencies)
     * [Compile](#compile)
 * [USAGE AND OPTIONS](#usage-and-options)
     * [General Options](#general-options)
@@ -66,7 +66,7 @@ The major new features from the latest release of [blackjack4494/yt-dlc](https:/
 
 * **[Format Sorting](#sorting-formats)**: The default format sorting options have been changed so that higher resolution and better codecs will be now preferred instead of simply using larger bitrate. Furthermore, you can now specify the sort order using `-S`. This allows for much easier format selection that what is possible by simply using `--format` ([examples](#format-selection-examples))
 
-* **Merged with youtube-dl [commit/d495292](https://github.com/ytdl-org/youtube-dl/commit/d495292852b6c2f1bd58bc2141ff2b0265c952cf)**: (v2021.05.16) You get all the latest features and patches of [youtube-dl](https://github.com/ytdl-org/youtube-dl) in addition to all the features of [youtube-dlc](https://github.com/blackjack4494/yt-dlc)
+* **Merged with youtube-dl [commit/379f52a](https://github.com/ytdl-org/youtube-dl/commit/379f52a4954013767219d25099cce9e0f9401961)**: (v2021.06.06) You get all the latest features and patches of [youtube-dl](https://github.com/ytdl-org/youtube-dl) in addition to all the features of [youtube-dlc](https://github.com/blackjack4494/yt-dlc)
 
 * **Merged with animelover1984/youtube-dl**: You get most of the features and improvements from [animelover1984/youtube-dl](https://github.com/animelover1984/youtube-dl) including `--write-comments`, `BiliBiliSearch`, `BilibiliChannel`, Embedding thumbnail in mp4/ogg/opus, playlist infojson etc. Note that the NicoNico improvements are not available. See [#31](https://github.com/yt-dlp/yt-dlp/pull/31) for details.
 
@@ -84,7 +84,7 @@ The major new features from the latest release of [blackjack4494/yt-dlc](https:/
 
 * **Aria2c with HLS/DASH**: You can use `aria2c` as the external downloader for DASH(mpd) and HLS(m3u8) formats
 
-* **New extractors**: AnimeLab, Philo MSO, Rcs, Gedi, bitwave.tv, mildom, audius, zee5, mtv.it, wimtv, pluto.tv, niconico users, discoveryplus.in, mediathek, NFHSNetwork, nebula, ukcolumn, whowatch, MxplayerShow, parlview (au), YoutubeWebArchive, fancode, Saitosan, ShemarooMe, telemundo, VootSeries, SonyLIVSeries, HotstarSeries
+* **New extractors**: AnimeLab, Philo MSO, Rcs, Gedi, bitwave.tv, mildom, audius, zee5, mtv.it, wimtv, pluto.tv, niconico users, discoveryplus.in, mediathek, NFHSNetwork, nebula, ukcolumn, whowatch, MxplayerShow, parlview (au), YoutubeWebArchive, fancode, Saitosan, ShemarooMe, telemundo, VootSeries, SonyLIVSeries, HotstarSeries, VidioPremier, VidioLive
 
 * **Fixed extractors**: archive.org, roosterteeth.com, skyit, instagram, itv, SouthparkDe, spreaker, Vlive, akamai, ina, rumble, tennistv, amcnetworks, la7 podcasts, linuxacadamy, nitter, twitcasting, viu, crackle, curiositystream, mediasite, rmcdecouverte, sonyliv, tubi, tenplay, patreon
 
@@ -131,6 +131,7 @@ Some of yt-dlp's default options are different from that of youtube-dl and youtu
 * Youtube channel URLs are automatically redirected to `/video`. Append a `/featured` to the URL to download only the videos in the home page. If the channel does not have a videos tab, we try to download the equivalent `UU` playlist instead. Also, `/live` URLs raise an error if there are no live videos instead of silently downloading the entire channel. You may use `--compat-options no-youtube-channel-redirect` to revert all these redirections
 * Unavailable videos are also listed for youtube playlists. Use `--compat-options no-youtube-unavailable-videos` to remove this
 * If `ffmpeg` is used as the downloader, the downloading and merging of formats happen in a single step when possible. Use `--compat-options no-direct-merge` to revert this
+* Thumbnail embedding in `mp4` is done with mutagen if possible. Use `--compat-options embed-thumbnail-atomicparsley` to force the use of AtomicParsley instead
 
 For ease of use, a few more compat options are available:
 * `--compat-options all`: Use all compat options
@@ -166,23 +167,38 @@ sudo aria2c https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o 
 sudo chmod a+rx /usr/local/bin/yt-dlp
 ```
 
-### DEPENDENCIES
-Python versions 3.6+ (CPython and PyPy) are officially supported. Other versions and implementations may or maynot work correctly.
-
-On windows, [Microsoft Visual C++ 2010 Redistributable Package (x86)](https://www.microsoft.com/en-us/download/details.aspx?id=26999) is also necessary to run yt-dlp. You probably already have this, but if the executable throws an error due to missing `MSVCR100.dll` you need to install it.
-
-Although there are no other required dependencies, `ffmpeg` and `ffprobe` are highly recommended. Other optional dependencies are `sponskrub`, `AtomicParsley`, `mutagen`, `pycryptodome`, `phantomjs` and any of the supported external downloaders. Note that the windows releases are already built with the python interpreter, mutagen and pycryptodome included.
-
 ### UPDATE
 You can use `yt-dlp -U` to update if you are using the provided release.
 If you are using `pip`, simply re-run the same command that was used to install the program.
 
+### DEPENDENCIES
+Python versions 3.6+ (CPython and PyPy) are supported. Other versions and implementations may or may not work correctly.
+
+<!-- https://www.microsoft.com/en-us/download/details.aspx?id=26999 -->
+On windows, [Microsoft Visual C++ 2010 SP1 Redistributable Package (x86)](https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe) is also necessary to run yt-dlp. You probably already have this, but if the executable throws an error due to missing `MSVCR100.dll` you need to install it manually.
+
+While all the other dependancies are optional, `ffmpeg` and `ffprobe` are highly recommended
+* [**ffmpeg** and **ffprobe**](https://www.ffmpeg.org) - Required for [merging seperate video and audio files](#format-selection) as well as for various [post-processing](#post-processing-options) tasks. Licence [depends on the build](https://www.ffmpeg.org/legal.html)
+* [**sponskrub**](https://github.com/faissaloo/SponSkrub) - For using the [sponskrub options](#sponskrub-sponsorblock-options). Licenced under [GPLv3+](https://github.com/faissaloo/SponSkrub/blob/master/LICENCE.md)
+* [**mutagen**](https://github.com/quodlibet/mutagen) - For embedding thumbnail in certain formats. Licenced under [GPLv2+](https://github.com/quodlibet/mutagen/blob/master/COPYING)
+* [**pycryptodome**](https://github.com/Legrandin/pycryptodome) - For decrypting various data. Licenced under [BSD2](https://github.com/Legrandin/pycryptodome/blob/master/LICENSE.rst)
+* [**websockets**](https://github.com/aaugustin/websockets) - For downloading over websocket. Licenced under [BSD3](https://github.com/aaugustin/websockets/blob/main/LICENSE)
+* [**AtomicParsley**](https://github.com/wez/atomicparsley) - For embedding thumbnail in mp4/m4a if mutagen is not present. Licenced under [GPLv2+](https://github.com/wez/atomicparsley/blob/master/COPYING)
+* [**rtmpdump**](http://rtmpdump.mplayerhq.hu) - For downloading `rtmp` streams. ffmpeg will be used as a fallback. Licenced under [GPLv2+](http://rtmpdump.mplayerhq.hu)
+* [**mplayer**](http://mplayerhq.hu/design7/info.html) or [**mpv**](https://mpv.io) - For downloading `rstp` streams. ffmpeg will be used as a fallback. Licenced under [GPLv2+](https://github.com/mpv-player/mpv/blob/master/Copyright)
+* [**phantomjs**](https://github.com/ariya/phantomjs) - Used in extractors where javascript needs to be run. Licenced under [BSD3](https://github.com/ariya/phantomjs/blob/master/LICENSE.BSD)
+* Any external downloader that you want to use with `--downloader`
+
+To use or redistribute the dependencies, you must agree to their respective licensing terms.
+
+Note that the windows releases are already built with the python interpreter, mutagen, pycryptodome and websockets included.
+
 ### COMPILE
 
 **For Windows**:
-To build the Windows executable, you must have pyinstaller (and optionally mutagen and pycryptodome)
+To build the Windows executable, you must have pyinstaller (and optionally mutagen, pycryptodome, websockets)
 
-    python3 -m pip install --upgrade pyinstaller mutagen pycryptodome
+    python3 -m pip install --upgrade pyinstaller mutagen pycryptodome websockets
 
 Once you have all the necessary dependencies installed, just run `py pyinst.py`. The executable will be built for the same architecture (32/64 bit) as the python used to build it.
 
@@ -358,6 +374,9 @@ Then simply run `make`. You can also run `make yt-dlp` instead to compile only t
                                      (default is 1)
     -r, --limit-rate RATE            Maximum download rate in bytes per second
                                      (e.g. 50K or 4.2M)
+    --throttled-rate RATE            Minimum download rate in bytes per second
+                                     below which throttling is assumed and the
+                                     video data is re-extracted (e.g. 100K)
     -R, --retries RETRIES            Number of retries (default is 10), or
                                      "infinite"
     --fragment-retries RETRIES       Number of retries for a fragment (default
@@ -500,13 +519,10 @@ Then simply run `make`. You can also run `make yt-dlp` instead to compile only t
                                      jar in
     --no-cookies                     Do not read/dump cookies (default)
     --cache-dir DIR                  Location in the filesystem where youtube-dl
-                                     can store some downloaded information
-                                     permanently. By default
-                                     $XDG_CACHE_HOME/youtube-dl or
-                                     ~/.cache/youtube-dl . At the moment, only
-                                     YouTube player files (for videos with
-                                     obfuscated signatures) are cached, but that
-                                     may change
+                                     can store some downloaded information (such
+                                     as client ids and signatures) permanently.
+                                     By default $XDG_CACHE_HOME/youtube-dl or
+                                     ~/.cache/youtube-dl
     --no-cache-dir                   Disable filesystem caching
     --rm-cache-dir                   Delete all filesystem cache files
 
@@ -699,7 +715,8 @@ Then simply run `make`. You can also run `make yt-dlp` instead to compile only t
                                      Metadata, EmbedSubtitle, EmbedThumbnail,
                                      SubtitlesConvertor, ThumbnailsConvertor,
                                      VideoRemuxer, VideoConvertor, SponSkrub,
-                                     FixupStretched, FixupM4a and FixupM3u8. The
+                                     FixupStretched, FixupM4a, FixupM3u8,
+                                     FixupTimestamp and FixupDuration. The
                                      supported executables are: AtomicParsley,
                                      FFmpeg, FFprobe, and SponSkrub. You can
                                      also specify "PP+EXE:ARGS" to give the
@@ -723,10 +740,13 @@ Then simply run `make`. You can also run `make yt-dlp` instead to compile only t
     --embed-subs                     Embed subtitles in the video (only for mp4,
                                      webm and mkv videos)
     --no-embed-subs                  Do not embed subtitles (default)
-    --embed-thumbnail                Embed thumbnail in the audio as cover art
+    --embed-thumbnail                Embed thumbnail in the video as cover art
     --no-embed-thumbnail             Do not embed thumbnail (default)
-    --add-metadata                   Write metadata to the video file
-    --no-add-metadata                Do not write metadata (default)
+    --embed-metadata                 Embed metadata including chapter markers
+                                     (if supported by the format) to the video
+                                     file (Alias: --add-metadata)
+    --no-embed-metadata              Do not write metadata (default)
+                                     (Alias: --no-add-metadata)
     --parse-metadata FROM:TO         Parse additional metadata like title/artist
                                      from other fields; see "MODIFYING METADATA"
                                      for details
@@ -736,7 +756,8 @@ Then simply run `make`. You can also run `make yt-dlp` instead to compile only t
                                      file. One of never (do nothing), warn (only
                                      emit a warning), detect_or_warn (the
                                      default; fix file if we can, warn
-                                     otherwise)
+                                     otherwise), force (try fixing even if file
+                                     already exists
     --ffmpeg-location PATH           Location of the ffmpeg binary; either the
                                      path to the binary or its containing
                                      directory
@@ -954,6 +975,8 @@ The available fields are:
  - `playlist_title` (string): Playlist title
  - `playlist_uploader` (string): Full name of the playlist uploader
  - `playlist_uploader_id` (string): Nickname or id of the playlist uploader
+ - `webpage_url` (string): A URL to the video webpage which if given to yt-dlp should allow to get the same result again
+ - `original_url` (string): The URL given by the user (or same as `webpage_url` for playlist entries)
 
 Available for the video that belongs to some logical chapter or section:
 
@@ -1127,7 +1150,7 @@ You can change the criteria for being considered the `best` by using `-S` (`--fo
  - `lang`: Language preference as given by the extractor
  - `quality`: The quality of the format as given by the extractor
  - `source`: Preference of the source as given by the extractor
- - `proto`: Protocol used for download (`https`/`ftps` > `http`/`ftp` > `m3u8_native` > `m3u8` > `http_dash_segments` > other > `mms`/`rtsp` > unknown > `f4f`/`f4m`)
+ - `proto`: Protocol used for download (`https`/`ftps` > `http`/`ftp` > `m3u8_native`/`m3u8` > `http_dash_segments`> `websocket_frag` > other > `mms`/`rtsp` > unknown > `f4f`/`f4m`)
  - `vcodec`: Video Codec (`av01` > `vp9.2` > `vp9` > `h265` > `h264` > `vp8` > `h263` > `theora` > other > unknown)
  - `acodec`: Audio Codec (`opus` > `vorbis` > `aac` > `mp4a` > `mp3` > `ac3` > `dts` > other > unknown)
  - `codec`: Equivalent to `vcodec,acodec`

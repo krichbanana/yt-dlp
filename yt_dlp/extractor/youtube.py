@@ -2237,7 +2237,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
         live_broadcast_details = microformat.get('liveBroadcastDetails')
         is_live = video_details.get('isLive') \
             or try_get(live_broadcast_details, lambda x: x['isLiveNow'], dict)
-        is_upcoming = video_details.get('isUpcoming'),
+        is_upcoming = video_details.get('isUpcoming')
         owner_profile_url = microformat.get('ownerProfileUrl')
 
         info = {

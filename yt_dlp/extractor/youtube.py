@@ -2617,7 +2617,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             'upload_date': unified_strdate(
                 microformat.get('uploadDate')
                 or search_meta('uploadDate')),
-            'uploader': video_details['author'],
+            'uploader': video_details.get('author'),
             'uploader_id': self._search_regex(r'/(?:channel|user)/([^/?&#]+)', owner_profile_url, 'uploader id') if owner_profile_url else None,
             'uploader_url': owner_profile_url,
             'channel_id': channel_id,

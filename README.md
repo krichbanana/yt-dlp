@@ -53,6 +53,7 @@ yt-dlp is a [youtube-dl](https://github.com/ytdl-org/youtube-dl) fork based on t
     * [Format Selection examples](#format-selection-examples)
 * [MODIFYING METADATA](#modifying-metadata)
     * [Modifying metadata examples](#modifying-metadata-examples)
+* [EXTRACTOR ARGUMENTS](#extractor-arguments)
 * [PLUGINS](#plugins)
 * [DEPRECATED OPTIONS](#deprecated-options)
 * [MORE](#more)
@@ -433,7 +434,8 @@ Then simply run `make`. You can also run `make yt-dlp` instead to compile only t
     --downloader-args NAME:ARGS      Give these arguments to the external
                                      downloader. Specify the downloader name and
                                      the arguments separated by a colon ":". You
-                                     can use this option multiple times
+                                     can use this option multiple times to give
+                                     different arguments to different downloaders
                                      (Alias: --external-downloader-args)
 
 ## Filesystem Options:
@@ -816,18 +818,10 @@ Then simply run `make`. You can also run `make yt-dlp` instead to compile only t
     --no-hls-split-discontinuity     Do not split HLS playlists to different
                                      formats at discontinuities such as ad
                                      breaks (default)
-    --youtube-include-dash-manifest  Download the DASH manifests and related
-                                     data on YouTube videos (default)
-                                     (Alias: --no-youtube-skip-dash-manifest)
-    --youtube-skip-dash-manifest     Do not download the DASH manifests and
-                                     related data on YouTube videos
-                                     (Alias: --no-youtube-include-dash-manifest)
-    --youtube-include-hls-manifest   Download the HLS manifests and related data
-                                     on YouTube videos (default)
-                                     (Alias: --no-youtube-skip-hls-manifest)
-    --youtube-skip-hls-manifest      Do not download the HLS manifests and
-                                     related data on YouTube videos
-                                     (Alias: --no-youtube-include-hls-manifest)
+    --extractor-args KEY:ARGS        Pass these arguments to the extractor. See
+                                     "EXTRACTOR ARGUMENTS" for details. You can
+                                     use this option multiple times to give
+                                     different arguments to different extractors
 
 # CONFIGURATION
 
@@ -1021,7 +1015,7 @@ Available only when used in `--print`:
 
 Each aforementioned sequence when referenced in an output template will be replaced by the actual value corresponding to the sequence name. Note that some of the sequences are not guaranteed to be present since they depend on the metadata obtained by a particular extractor. Such sequences will be replaced with placeholder value provided with `--output-na-placeholder` (`NA` by default).
 
-For example for `-o %(title)s-%(id)s.%(ext)s` and an mp4 video with title `yt-dlp test video` and id `BaW_jenozKcj`, this will result in a `yt-dlp test video-BaW_jenozKcj.mp4` file created in the current directory.
+For example for `-o %(title)s-%(id)s.%(ext)s` and an mp4 video with title `yt-dlp test video` and id `BaW_jenozKc`, this will result in a `yt-dlp test video-BaW_jenozKc.mp4` file created in the current directory.
 
 For numeric sequences you can use numeric related formatting, for example, `%(view_count)05d` will result in a string with view count padded with zeros up to 5 characters, like in `00042`.
 
@@ -1331,6 +1325,18 @@ $ yt-dlp --parse-metadata 'description:(?s)(?P<meta_comment>.+)' --add-metadata
 
 ```
 
+# EXTRACTOR ARGUMENTS
+
+Some extractors accept additional arguments which can be passed using `--extractor-args KEY:ARGS`. `ARGS` is a `;` (semicolon) seperated string of `ARG=VAL1,VAL2`. Eg: `--extractor-args youtube:skip=dash,hls`
+
+The following extractors use this feature:
+* **youtube**
+    * `skip`: `hls` or `dash` (or both) to skip download of the respective manifests
+    * `player_client`: `web` (default) or `android` (force use the android client fallbacks for video extraction)
+    * `player_skip`: `configs` - skip requests if applicable for client configs and use defaults
+
+NOTE: These options may be changed/removed in the future without concern for backward compatibility
+
 # PLUGINS
 
 Plugins are loaded from `<root-dir>/ytdlp_plugins/<type>/__init__.py`. Currently only `extractor` plugins are supported. Support for `downloader` and `postprocessor` plugins may be added in the future. See [ytdlp_plugins](ytdlp_plugins) for example.
@@ -1362,6 +1368,10 @@ While these options still work, their use is not recommended since there are oth
     --list-formats-old               --compat-options list-formats (Alias: --no-list-formats-as-table)
     --list-formats-as-table          --compat-options -list-formats [Default] (Alias: --no-list-formats-old)
     --sponskrub-args ARGS            --ppa "sponskrub:ARGS"
+    --youtube-skip-dash-manifest     --extractor-args "youtube:skip=dash" (Alias: --no-youtube-include-dash-manifest)
+    --youtube-skip-hls-manifest      --extractor-args "youtube:skip=hls" (Alias: --no-youtube-include-hls-manifest)
+    --youtube-include-dash-manifest  Default (Alias: --no-youtube-skip-dash-manifest)
+    --youtube-include-hls-manifest   Default (Alias: --no-youtube-skip-hls-manifest)
     --test                           Used by developers for testing extractors. Not intended for the end user
     --youtube-print-sig-code         Used for testing youtube signatures
 
